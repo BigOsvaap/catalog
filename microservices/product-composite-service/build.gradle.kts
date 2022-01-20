@@ -15,9 +15,13 @@ repositories {
 	mavenCentral()
 }
 
+val springDocVersion = "1.5.9"
+
 dependencies {
 	implementation(project(":api"))
 	implementation(project(":util"))
+	implementation("org.springdoc:springdoc-openapi-kotlin:$springDocVersion")
+	implementation("org.springdoc:springdoc-openapi-webflux-ui:$springDocVersion")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")

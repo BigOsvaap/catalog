@@ -15,9 +15,12 @@ repositories {
 }
 
 val springBootVersion = "2.6.2"
+val springDocVersion = "1.5.9"
 
 dependencies {
 	implementation(platform("org.springframework.boot:spring-boot-dependencies:$springBootVersion"))
+	implementation("org.springdoc:springdoc-openapi-kotlin:$springDocVersion")
+	implementation("org.springdoc:springdoc-openapi-common:$springDocVersion")
 	implementation("org.springframework.boot:spring-boot-starter-webflux")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("io.projectreactor.kotlin:reactor-kotlin-extensions")
