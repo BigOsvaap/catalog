@@ -4,7 +4,6 @@ import com.bigosvaap.api.core.product.Product
 import com.bigosvaap.api.core.product.ProductService
 import com.bigosvaap.api.exceptions.InvalidInputException
 import com.bigosvaap.api.exceptions.NotFoundException
-import com.bigosvaap.util.http.GlobalControllerExceptionHandler
 import com.bigosvaap.util.http.ServiceUtil
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

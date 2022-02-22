@@ -16,10 +16,17 @@ repositories {
 }
 
 val springDocVersion = "1.5.9"
+val mapStructVersion = "1.4.2.Final"
 
 dependencies {
 	implementation(project(":api"))
 	implementation(project(":util"))
+	implementation("org.mapstruct:mapstruct:$mapStructVersion")
+
+	compileOnly("org.mapstruct:mapstruct-processor:$mapStructVersion")
+	annotationProcessor("org.mapstruct:mapstruct-processor:$mapStructVersion")
+	testAnnotationProcessor("org.mapstruct:mapstruct-processor:$mapStructVersion")
+
 	implementation("org.springdoc:springdoc-openapi-kotlin:$springDocVersion")
 	implementation("org.springdoc:springdoc-openapi-webflux-ui:$springDocVersion")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")

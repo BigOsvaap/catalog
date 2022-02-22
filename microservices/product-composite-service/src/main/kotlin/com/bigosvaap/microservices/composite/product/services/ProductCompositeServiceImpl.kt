@@ -51,7 +51,7 @@ class ProductCompositeServiceImpl @Autowired constructor(
         val reviewAddress = if (reviews.isNotEmpty()) reviews[0].serviceAddress else ""
         val recommendationAddress =
             if (recommendations.isNotEmpty()) recommendations[0].serviceAddress else ""
-        val serviceAddresses = ServiceAddresses(serviceAddress, productAddress, reviewAddress, recommendationAddress)
+        val serviceAddresses = ServiceAddresses(serviceAddress, productAddress ?: "", reviewAddress, recommendationAddress)
 
         return ProductAggregate(productId, name, weight, recommendationSummaries, reviewSummaries, serviceAddresses)
     }
