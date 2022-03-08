@@ -3,13 +3,19 @@ package com.bigosvaap.microservices.core.review.services
 import com.bigosvaap.api.core.review.Review
 import com.bigosvaap.api.core.review.ReviewService
 import com.bigosvaap.api.exceptions.InvalidInputException
+import com.bigosvaap.microservices.core.review.persistence.ReviewRepository
 import com.bigosvaap.util.http.ServiceUtil
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.dao.DataIntegrityViolationException
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-class ReviewServiceImpl @Autowired constructor(private val serviceUtil: ServiceUtil): ReviewService {
+class ReviewServiceImpl @Autowired constructor(
+    private val serviceUtil: ServiceUtil,
+    private val repository: ReviewRepository,
+    private val mapper: ReviewMapper
+    ): ReviewService {
 
     companion object {
         private val LOG = LoggerFactory.getLogger(ReviewServiceImpl::class.java)
@@ -20,19 +26,31 @@ class ReviewServiceImpl @Autowired constructor(private val serviceUtil: ServiceU
             throw InvalidInputException("Invalid productId: $productId")
         }
 
-        if (productId == 213) {
-            LOG.debug("No reviews found for productId: $productId", )
-            return arrayListOf()
+        val entityList = repository.findByProductId(productId)
+        val list = mapper.entityListToApiList(entityList)
+        list.forEach{ review ->
+            review.serviceAddress = serviceUtil.serviceAddress
         }
 
-        val list =  arrayListOf<Review>()
-        list.add(Review(productId, 1, "Author 1", "Subject 1", "Content 1", serviceUtil.serviceAddress))
-        list.add(Review(productId, 2, "Author 2", "Subject 2", "Content 2", serviceUtil.serviceAddress))
-        list.add(Review(productId, 3, "Author 3", "Subject 3", "Content 3", serviceUtil.serviceAddress))
-
-        LOG.debug("/reviews response size: ${list.size}")
+        LOG.debug("getReviews: response size: ${list.size}")
 
         return list
+    }
+
+    override fun createReview(body: Review): Review {
+        return try {
+            val entity = mapper.apiToEntity(body)
+            val newEntity = repository.save(entity)
+            LOG.debug("createReview: created a review entity: ${body.productId}/${body.reviewId}")
+            mapper.entityToApi(newEntity)
+        } catch (dive: DataIntegrityViolationException) {
+            throw InvalidInputException("Duplicate key, Product Id: ${body.productId}, Review Id: ${body.reviewId}")
+        }
+    }
+
+    override fun deleteReviews(productId: Int) {
+        LOG.debug("deleteReviews: tries to delete reviews for the product with productId: $productId")
+        repository.deleteAll(repository.findByProductId(productId))
     }
 
 }

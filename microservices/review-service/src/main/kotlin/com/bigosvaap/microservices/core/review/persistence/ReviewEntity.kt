@@ -10,6 +10,6 @@ class ReviewEntity(
     var author: String,
     var subject: String,
     var content: String,
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY) var id: Int? = null,
+    @Id @GeneratedValue var id: Int? = null,
     @Version var version: Int? = null
 )

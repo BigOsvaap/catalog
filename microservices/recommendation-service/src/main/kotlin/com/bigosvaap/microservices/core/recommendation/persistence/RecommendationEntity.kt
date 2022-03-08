@@ -12,13 +12,7 @@ class RecommendationEntity(
     var recommendationId: Int,
     var author: String,
     var rating: Int,
-    var content: String
-){
-
-    @Id
-    var id: String? = null
-
-    @Version
-    var version: Int? = null
-
-}
+    var content: String,
+    @Id var id: String? = null,
+    @Version var version: Int? = null
+)
